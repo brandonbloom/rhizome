@@ -32,6 +32,17 @@
     :node->descriptor (fn [n] {:label (when (number? n) (str n))}))
   (Thread/sleep pause)
 
+  (view-tree sequential? seq t-0
+    :node->descriptor (fn [n] {:label (cond
+                                        (number? n) (str n)
+                                        (vector? n) ["<left> left" "<right> right"])})
+    :edge->descriptor (fn [src dst]
+                        {:headport "left:n"
+                         :tailport (cond
+                                     (= (first src) dst) "left:s"
+                                     (= (second src) dst) "right:s")}))
+  (Thread/sleep pause)
+
   (view-tree list? seq t-1
     :node->descriptor (fn [n] {:label (when (vector? n) n)}))
   (Thread/sleep pause)
